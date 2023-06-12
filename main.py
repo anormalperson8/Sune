@@ -86,8 +86,7 @@ async def words(ctx):
 # End of censorship commands
 
 # Start of censorship slash commands
-@client.tree.command(name="Add Word",
-                     description="adds a word to the 1984 list, only useable by the owner", guilds=client.guilds)
+@client.tree.command(description="adds a word to the 1984 list, only useable by the owner", guilds=client.guilds)
 async def add_a_word(interaction: discord.Interaction, arg: str) -> None:
     await interaction.response.defer(thinking=True)
     if interaction.user.bot:
