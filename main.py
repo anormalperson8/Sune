@@ -86,23 +86,24 @@ async def words(ctx):
 # End of censorship commands
 
 # Start of censorship slash commands
-@client.tree.command(description="adds a word to the 1984 list, only useable by the owner", guilds=client.guilds)
-async def add(interaction: discord.Interaction, arg: str) -> None:
+@client.tree.command(name="Add Word",
+                     description="adds a word to the 1984 list, only useable by the owner", guilds=client.guilds)
+async def add_a_word(interaction: discord.Interaction, arg: str) -> None:
     await interaction.response.defer(thinking=True)
     if interaction.user.bot:
-        await interaction.response.edit_original_response("You're not a user :P")
+        await interaction.edit_original_response(content="You're not a user :P")
         return
     if interaction.user.id != owner_id:
-        await interaction.response.send_message("Only the owner of the bot can amend the 1984 list!")
+        await interaction.edit_original_response(content="Only the owner of the bot can amend the 1984 list!")
         return
     if len(arg) == 1:
-        await interaction.response.send_message("That's... a letter, are you sure?")
+        await interaction.edit_original_response(content="That's... a letter, are you sure?")
         return
     stat = add_word(arg, censorship_list)
     if stat:
-        await interaction.response.send_message(f"\"{arg}\" successfully added!")
+        await interaction.edit_original_response(content=f"\"{arg}\" successfully added!")
     else:
-        await interaction.response.send_message(f"\"{arg}\" is already in the list/It is not a valid word!")
+        await interaction.edit_original_response(content=f"\"{arg}\" is already in the list/It is not a valid word!")
 
 
 # End of censorship slash commands
