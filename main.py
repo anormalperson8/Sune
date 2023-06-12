@@ -1,6 +1,6 @@
 import discord
 import os
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 from discord.ext import commands
 from censorship import get, add_word, delete_word
 
@@ -45,6 +45,7 @@ async def add(ctx, arg):
 
 @client.command()
 async def words(ctx):
+    print(ctx.author.id)
     if ctx.author.bot:
         await ctx.send("You're not a user :P")
         return
