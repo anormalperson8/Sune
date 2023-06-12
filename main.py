@@ -13,6 +13,7 @@ token = os.getenv('TOKEN')
 owner_id = int(os.getenv('ID'))
 
 censorship_list = []
+function_just_called = False
 
 
 @client.event
@@ -40,12 +41,33 @@ async def add(ctx, arg):
     if len(arg) == 1:
         await ctx.send("That's... a letter, are you sure?")
         return
-    add_word(arg, censorship_list)
+    stat = add_word(arg, censorship_list)
+    if stat:
+        await ctx.send(f"\"{arg}\" successfully added!")
+    else:
+        await ctx.send(f"\"{arg}\" is already in the list/It is not a valid word!")
+
+
+@client.command()
+async def delete(ctx, arg):
+    if ctx.author.bot:
+        await ctx.send("You're not a user :P")
+        return
+    if ctx.author.id != owner_id:
+        await ctx.send("Only the owner of the bot can amend the 1984 list!")
+        return
+    if len(arg) == 1:
+        await ctx.send("That's... a letter, are you sure?")
+        return
+    stat = delete_word(arg, censorship_list)
+    if stat:
+        await ctx.send(f"\"{arg}\" successfully deleted!")
+    else:
+        await ctx.send(f"\"{arg}\" is not on the list/It is not a valid word!")
 
 
 @client.command()
 async def words(ctx):
-    print(ctx.author.id)
     if ctx.author.bot:
         await ctx.send("You're not a user :P")
         return
@@ -60,6 +82,9 @@ async def words(ctx):
 @client.listen('on_message')
 async def on_message(message):
     if message.author.bot:
+        return
+    if message.content[0] == '^' and message.content[1] == 'a' \
+            and message.content[2] == 'd' and message.content[3] == 'd':
         return
     name = message.author.nick
     if name is None:
