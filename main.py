@@ -105,7 +105,25 @@ async def add_a_word(interaction: discord.Interaction, arg: str) -> None:
         await interaction.edit_original_response(content=f"\"{arg}\" is already in the list/It is not a valid word!")
 
 
+@client.tree.command(description="adds a word to the 1984 list, only useable by the owner", guilds=client.guilds)
+async def delete_a_word(interaction: discord.Interaction, arg: str) -> None:
+    await interaction.response.defer(thinking=True)
+    if interaction.user.bot:
+        await interaction.edit_original_response(content="You're not a user :P")
+        return
+    if interaction.user.id != owner_id:
+        await interaction.edit_original_response(content="Only the owner of the bot can amend the 1984 list!")
+        return
+    if len(arg) == 1:
+        await interaction.edit_original_response(content="That's... a letter, are you sure?")
+        return
+    stat = delete_word(arg, censorship_list)
+    if stat:
+        await interaction.edit_original_response(content=f"\"{arg}\" successfully deleted!")
+    else:
+        await interaction.edit_original_response(content=f"\"{arg}\" is not in the list/It is not a valid word!")
 # End of censorship slash commands
+
 
 @commands.guild_only()
 @client.command()

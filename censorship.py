@@ -19,7 +19,7 @@ def add_word(word, list1984):
     return True
 
 
-def delete_word(list1984, word):
+def delete_word(word, list1984):
     dummy = []
     get(dummy)
     if word in dummy:
