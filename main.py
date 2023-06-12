@@ -1,11 +1,15 @@
 import discord
 import os
+import asyncio
+import typing
 from dotenv import load_dotenv
 from discord.ext import commands
+from discord import app_commands
+from discord import interactions
 from censorship import get, add_word, delete_word
 
 intents = discord.Intents.all()
-client = commands.Bot(command_prefix='^', intents=intents)
+client = commands.Bot(command_prefix='^', intents=intents, activity=discord.Game(name="Suffering"))
 
 load_dotenv("/home/sunny/SuneBot/data/text.env")
 
@@ -22,6 +26,7 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
 
+# Start of censorship commands
 @client.command()
 async def boo(ctx):
     if ctx.author.bot:
@@ -79,6 +84,41 @@ async def words(ctx):
     await ctx.send(res)
 
 
+# End of censorship commands
+
+# Start of censorship slash commands
+@client.tree.command(description="adds a word to the 1984 list, only useable by the owner", guilds=client.guilds)
+async def add(interaction: discord.Interaction, arg: str) -> None:
+    await interaction.response.defer(thinking=True)
+    if interaction.user.bot:
+        await interaction.response.edit_original_response("You're not a user :P")
+        return
+    if interaction.user.id != owner_id:
+        await interaction.response.send_message("Only the owner of the bot can amend the 1984 list!")
+        return
+    if len(arg) == 1:
+        await interaction.response.send_message("That's... a letter, are you sure?")
+        return
+    stat = add_word(arg, censorship_list)
+    if stat:
+        await interaction.response.send_message(f"\"{arg}\" successfully added!")
+    else:
+        await interaction.response.send_message(f"\"{arg}\" is already in the list/It is not a valid word!")
+
+
+# End of censorship slash commands
+
+@commands.guild_only()
+@client.command()
+async def sync(ctx):
+    if ctx.author.id == owner_id:
+        await client.tree.sync()
+        await ctx.send("Commands synced!")
+    else:
+        await ctx.send("You're not the owner")
+
+
+# Censorship on message
 @client.listen('on_message')
 async def on_message(message):
     if message.author.bot:
@@ -102,7 +142,7 @@ async def on_message(message):
         await message.delete()
         await message.channel.send(
             f"Beep boop I've removed curse word(s) from the message.\n"
-            f"The message sent by {name} was \"{text}\".")
+            f"The message sent by {name} was \"{text}\". And yes, you have been 1984'd")
 
 
 client.run(token)
