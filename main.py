@@ -1,11 +1,9 @@
 import discord
 import os
-import asyncio
 import typing
 from dotenv import load_dotenv
 from discord.ext import commands
 from discord import app_commands
-from discord import interactions
 from censorship import get, add_word, delete_word
 
 intents = discord.Intents.all()
