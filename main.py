@@ -1,9 +1,7 @@
 import discord
 import os
-import typing
 from dotenv import load_dotenv
 from discord.ext import commands
-from discord import app_commands
 from censorship import get, add_word, delete_word
 
 intents = discord.Intents.all()
@@ -15,7 +13,6 @@ token = os.getenv('TOKEN')
 owner_id = int(os.getenv('ID'))
 
 censorship_list = []
-function_just_called = False
 
 
 @client.event
@@ -159,7 +156,7 @@ async def on_message(message):
         await message.delete()
         await message.channel.send(
             f"Beep boop I've removed curse word(s) from the message.\n"
-            f"The message sent by {name} was \"{text}\". And yes, you have been 1984'd")
+            f"The message sent by {name} was \"{text}\".\nAnd yes, you have been 1984'd")
 
 
 client.run(token)
