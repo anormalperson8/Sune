@@ -26,7 +26,7 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
 
-# Start of censorship commands
+# Response-testing command
 @client.command()
 async def boo(ctx):
     if ctx.author.bot:
@@ -35,6 +35,7 @@ async def boo(ctx):
     await ctx.send("Oi")
 
 
+# Start of censorship commands
 @client.command()
 async def add(ctx, arg):
     if ctx.author.bot:
