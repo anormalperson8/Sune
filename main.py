@@ -1,13 +1,13 @@
 import discord
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from discord.ext import commands
 from censorship import get, add_word, delete_word
 
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix='^', intents=intents)
 
-load_dotenv()
+load_dotenv("/home/sunny/SuneBot/data/text.env")
 
 token = os.getenv('TOKEN')
 owner_id = int(os.getenv('ID'))
