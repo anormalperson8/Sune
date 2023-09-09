@@ -7,7 +7,10 @@ from censorship import get, add_word, delete_word
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix='^', intents=intents, activity=discord.Game(name="Suffering"))
 
-load_dotenv("/home/sunny/SuneBot/data/text.env")
+path = os.path.dirname(os.path.abspath(__file__))
+os.chdir(path)
+data_path = f"{path}/data"
+load_dotenv(f"{data_path}/text.env")
 
 token = os.getenv('TOKEN')
 owner_id = int(os.getenv('ID'))
